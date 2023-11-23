@@ -90,14 +90,14 @@ float speed_gondolkodni = 0;
 
 	printf(CYAN_TEXT"Kerem a jatekos neveket (egyedieket):\n");
 	printf(RESET_TEXT);
-	char nevek[max_jatekoszam][max_char_hossz] = {};
+	char nevek[max_jatekoszam][max_char_hossz] = {0};
 	for (int i = 0; i < jatekos_szam; i++)
 	{
 		scanf("%s", &nevek[i]);
 	}
 	system("cls");
 
-
+	int
 	srand((unsigned int)time(NULL));
 	int jatekos_kor[max_jatekoszam];
 	for (int i = 0; i < jatekos_szam; i++) {
