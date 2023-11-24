@@ -70,6 +70,15 @@ void pr_jatekosok(jatekosok *jatekos, int jatekos_szam){
 					
 }
 
+void pr_szabalyok(){
+	system("cls");
+	printf(MAGENTA_TEXT"Csak 1 nyertes lehet.\n");
+	printf("A szavazas utolso fordulojaban ha 2 jatekos maradt eletben akkor kozottuk veletlenszeruen sorsoljuk ki a nyertest.\n");
+	printf("Aki nem szavaz idoben az kiesett.\n");
+	printf("Akikre ugyanannyi szavazat esik egy korben azok mind kiesnek.");
+	printf(RESET_TEXT);
+}
+
 int sc_jatekosszam(){
 	int a = 0;
     while (a < 3 || a > 8)
@@ -132,7 +141,8 @@ int valaszto(){
 	printf(YELLOW_TEXT"Kerlek valassz a lehetosegek kozul.\n");
 	printf(RED_TEXT"Kilepes: 0 ");
 	printf(CYAN_TEXT"Kiiratas 1 ");
-	printf(GREEN_TEXT"Szavazas: 2\n");
+	printf(GREEN_TEXT"Szavazas: 2 ");
+	printf(CYAN_TEXT"Szabalyok: 3\n");
 	printf(RESET_TEXT);
 	while (i < 0 || i > 3)
 	{
@@ -140,7 +150,6 @@ int valaszto(){
 	}
 	return i;
 }
-
 void kilepes(){
 	printf(YELLOW_TEXT"Koszonom hogy a jatekommal jatszottal.\n");
 	printf(YELLOW_TEXT"Keszito: ");
@@ -196,13 +205,12 @@ int main()
 				break;
 			}
 			input = valaszto();
-			
-			
 		}
-		
+		if (input == 3){
+			pr_szabalyok();
+			input = valaszto();
+		}
 	}
-	
-	pr_jatekosok(jatekos, jatekos_szam);
 
 	return 0;
 }
