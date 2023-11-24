@@ -53,28 +53,7 @@ int sc_jatekosszam(){
 }
 
 void generalas(jatekosok *jatekos, int jatekos_szam){
-	for (int i = 0; i < jatekos_szam; i++)
-	{
-		jatekos[i].id = i + 1;
-	}
-}
 
-int main()
-{
-	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok)); //jatekos[4].nev
-	pr_start();
-	int jatekos_szam = sc_jatekosszam();
-	generalas(jatekos, jatekos_szam);
-
-    for (int i = 0; i < jatekos_szam; i++)
-    {
-    printf("%d", jatekos[i].id);
-    }
-
-
-	return 0;
-
-	//Generálás
 	const char foglalkozasok[][max_char_hossz_foglalkozas] = {
 		"Programozo", "Mernok", "Orvos", "Apolo", "Autoszerelo",
 		"Pekek", "Ugyved", "Tanar", "Epitesz", "Grafikus",
@@ -93,5 +72,30 @@ int main()
 		"Artatlan","Artatlan","Artatlan","Artatlan","Artatlan","Artatlan"
 		,"2 embert olt","Gyereket olt","Terrorista","Drogdiller","Haborus hos"
 	};
+
+	srand((unsigned int)time(NULL));
+
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		jatekos[i].id = i + 1;
+		strcpy(jatekos[i].foglalkozas, foglalkozasok[rand() % db_foglalkozas]);
+	}
+}
+
+int main()
+{
+	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok)); //jatekos[4].nev
+	pr_start();
+	int jatekos_szam = sc_jatekosszam();
+	generalas(jatekos, jatekos_szam);
+
+    for (int i = 0; i < jatekos_szam; i++)
+    {
+    printf("%d %s\n", jatekos[i].id, jatekos[i].foglalkozas);
+    }
+
+
+	return 0;
+
 
 }
