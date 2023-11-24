@@ -28,23 +28,51 @@
 #define db_politikai_beallitottsag 10
 #define db_eloelet 11
 
+
+typedef struct {
+    int id;
+	char nev[max_char_hossz];
+    char foglalkozas[max_char_hossz_foglalkozas];
+	char csaladi_allapot[max_char_hossz_csaladi_allapot];
+	char eloelet[max_char_hossz_eloelet];
+	char politika[max_char_hossz_politikai_beallitottsag];
+	int kinezet;
+
+} jatekosok;
+
 void pr_start(){
 	printf("Jatek tortenete. Bevezeto.\n");
 }
 int sc_jatekosszam(){
-	int a;
+	int a = 0;
+    while (a < 3 || a > 8)
+    {
 	scanf("%d", &a);
+    }
 	return a;
 }
+
+void generalas(jatekosok *jatekos, int jatekos_szam){
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		jatekos[i].id = i + 1;
+	}
+}
+
 int main()
 {
+	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok)); //jatekos[4].nev
 	pr_start();
 	int jatekos_szam = sc_jatekosszam();
-	printf("%d",jatekos_szam);
+	generalas(jatekos, jatekos_szam);
+
+    for (int i = 0; i < jatekos_szam; i++)
+    {
+    printf("%d", jatekos[i].id);
+    }
+
 
 	return 0;
-	//egyáltalán nincs még befejezve
-	//hiányoznak: dinamikus tömbök, indexelhető struktura a statoknak
 
 	//Generálás
 	const char foglalkozasok[][max_char_hossz_foglalkozas] = {
