@@ -174,18 +174,37 @@ void kilepes(){
 int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	for (int i = 0; i < jatekos_szam; i++)
 	{
-		if (jatekos[i].szavazat == i + 1)
+		if (jatekos[i].el == 1)
 		{
-			jatekos[i].el = 0;
-			printf(RED_TEXT"%s jatekos kiesett mert magara szavazott.\n", jatekos[i].nev); printf(RESET_TEXT);
-		}
-		if (jatekos[i].szavazat > max_jatekoszam || jatekos[i].szavazat < 1)
-		{
-			jatekos[i].el = 0;
-			printf(RED_TEXT"%s jatekos kiesett mert ervenytelen szavazatot adott le.\n", jatekos[i].nev); printf(RESET_TEXT);
+			if (jatekos[i].szavazat == i + 1)
+			{
+				jatekos[i].el = 0;
+				printf(RED_TEXT"%s jatekos kiesett mert magara szavazott.\n", jatekos[i].nev); printf(RESET_TEXT);
+			}
+			else if (jatekos[i].szavazat > max_jatekoszam || jatekos[i].szavazat < 1)
+			{
+				jatekos[i].el = 0;
+				printf(RED_TEXT"%s jatekos kiesett mert ervenytelen szavazatot adott le.\n", jatekos[i].nev); printf(RESET_TEXT);
+			} else{
+				jatekos[jatekos[i].szavazat - 1].kapott_szavazat++;
+			}
 		}
 		
 	}
+	int max_szavazat = 0; //komment, nincs kezelve az ha 2 játékos egyenlő mennyiségü szavazatot kap
+	int max_szavazat_index = -1;
+	for(int i = 0; i < jatekos_szam;i++){
+		if (jatekos[i].kapott_szavazat > max_szavazat)
+		{
+			max_szavazat = jatekos[i].kapott_szavazat;
+			max_szavazat_index = i;
+		}
+	}
+	if (jatekos[max_szavazat_index].el == 1)
+	{
+	printf(RED_TEXT"%d. jatekost kiszavaztak.\n", max_szavazat_index + 1); printf(RESET_TEXT);
+	jatekos[max_szavazat_index].el = 0;	}
+
 	db_jatekosok_elok = 0;
 	for (int i = 0; i < jatekos_szam; i++)
 	{
@@ -207,15 +226,16 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	system("cls");
 	pr_jatekosok(jatekos, jatekos_szam);
 	printf(YELLOW_TEXT"Szavazas kezdete.\n");
-	printf(RED_TEXT"Csak %d mp-etek lessz szavazni. (aki nem szavaz az idon bellul az meghal)", ido_szavazas);
+	printf(RED_TEXT"Csak %d mp-etek lessz szavazni. (aki nem szavaz az idon bellul az meghal)\n", ido_szavazas);
 	printf(RESET_TEXT);
 	for (int i = 0; i < jatekos_szam; i++)
 	{
-		if (jatekos[i].el = 1)
+		if (jatekos[i].el == 1)
 		{
-		printf(CYAN_TEXT"\n%-*s ", max_char_hossz, jatekos[i].nev);
+		printf(CYAN_TEXT"%-*s ", max_char_hossz, jatekos[i].nev);
 		scanf("%d", &jatekos[i].szavazat);
 		}
+		else{}
 	}
 	db_jatekosok_elok = szavazas_szamlalo(jatekos,jatekos_szam,db_jatekosok_elok);
 	return db_jatekosok_elok;
