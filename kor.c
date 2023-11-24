@@ -32,6 +32,7 @@
 typedef struct {
     int id;
 	char nev[max_char_hossz];
+	int kor;
     char foglalkozas[max_char_hossz_foglalkozas];
 	char csaladi_allapot[max_char_hossz_csaladi_allapot];
 	char eloelet[max_char_hossz_eloelet];
@@ -43,6 +44,24 @@ typedef struct {
 void pr_start(){
 	printf("Jatek tortenete. Bevezeto.\n");
 }
+
+void pr_jatekosok(jatekosok *jatekos, int jatekos_szam){
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+	printf(BLUE_TEXT);
+	printf("ID %d ", jatekos[i].id);
+	printf("Nev %s ", jatekos[i].nev);
+	printf("Kor %-2d ", jatekos[i].kor);
+	printf("Foglalkozas %-*s ",max_char_hossz_foglalkozas, jatekos[i].foglalkozas);
+	printf("Csaladi allapot: %-*s ", max_char_hossz_csaladi_allapot, jatekos[i].csaladi_allapot);
+	printf("Eloelet %-*s ", max_char_hossz_eloelet, jatekos[i].eloelet);
+	printf("Politika %-*s",max_char_hossz_politikai_beallitottsag, jatekos[i].politika);
+	printf("Kinezet %d\n", jatekos[i].kinezet);
+	printf(RESET_TEXT);
+	}
+					
+}
+
 int sc_jatekosszam(){
 	int a = 0;
     while (a < 3 || a > 8)
@@ -50,6 +69,17 @@ int sc_jatekosszam(){
 	scanf("%d", &a);
     }
 	return a;
+}
+
+void sc_nevek(jatekosok *jatekos,int jatekos_szam){
+	printf(YELLOW_TEXT"Kerem a jatekosnevekket.\n");
+	printf(BLUE_TEXT);
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		printf("%d. jatekos: ", i + 1);
+		scanf("%s", jatekos[i].nev);
+	}
+	
 }
 
 void generalas(jatekosok *jatekos, int jatekos_szam){
@@ -69,7 +99,7 @@ void generalas(jatekosok *jatekos, int jatekos_szam){
 		"Forradalmar", "Autokrata", "Radikalis", "Szelsojobb", "Szelsobal"
 	};
 	const char eloeletek[][max_char_hossz_eloelet] = {
-		"Artatlan","Artatlan","Artatlan","Artatlan","Artatlan","Artatlan"
+		"Ismeretlen","Ismeretlen","Ismeretlen","Ismeretlen","Ismeretlen","Ismeretlen"
 		,"2 embert olt","Gyereket olt","Terrorista","Drogdiller","Haborus hos"
 	};
 
@@ -78,22 +108,24 @@ void generalas(jatekosok *jatekos, int jatekos_szam){
 	for (int i = 0; i < jatekos_szam; i++)
 	{
 		jatekos[i].id = i + 1;
+		jatekos[i].kor = rand() % 100 + 1;
 		strcpy(jatekos[i].foglalkozas, foglalkozasok[rand() % db_foglalkozas]);
+		strcpy(jatekos[i].csaladi_allapot, csaladi_allapotok[rand() % db_csaladi_allapot]);
+		strcpy(jatekos[i].eloelet, eloeletek[rand() % db_eloelet]);
+		strcpy(jatekos[i].politika, politikai_beallitottsagok[rand() % db_politikai_beallitottsag]);
+		jatekos[i].kinezet = rand() % 10 + 1;
 	}
 }
+
 
 int main()
 {
 	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok)); //jatekos[4].nev
 	pr_start();
 	int jatekos_szam = sc_jatekosszam();
+	sc_nevek(jatekos, jatekos_szam);
 	generalas(jatekos, jatekos_szam);
-
-    for (int i = 0; i < jatekos_szam; i++)
-    {
-    printf("%d %s\n", jatekos[i].id, jatekos[i].foglalkozas);
-    }
-
+	pr_jatekosok(jatekos, jatekos_szam);
 
 	return 0;
 
