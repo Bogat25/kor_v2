@@ -38,6 +38,7 @@ typedef struct {
 	char eloelet[max_char_hossz_eloelet];
 	char politika[max_char_hossz_politikai_beallitottsag];
 	int kinezet;
+	int el;
 
 } jatekosok;
 
@@ -48,7 +49,12 @@ void pr_start(){
 void pr_jatekosok(jatekosok *jatekos, int jatekos_szam){
 	for (int i = 0; i < jatekos_szam; i++)
 	{
-	printf(BLUE_TEXT);
+	if (jatekos[i].el = 1)
+	{
+		printf(BLUE_TEXT);
+	} else if(jatekos[i].el = 0){
+		printf(RED_TEXT);
+	}
 	printf("ID %d ", jatekos[i].id);
 	printf("Nev %s ", jatekos[i].nev);
 	printf("Kor %-2d ", jatekos[i].kor);
@@ -114,9 +120,29 @@ void generalas(jatekosok *jatekos, int jatekos_szam){
 		strcpy(jatekos[i].eloelet, eloeletek[rand() % db_eloelet]);
 		strcpy(jatekos[i].politika, politikai_beallitottsagok[rand() % db_politikai_beallitottsag]);
 		jatekos[i].kinezet = rand() % 10 + 1;
+		jatekos[i].el = 1;
 	}
 }
 
+int valaszto(){
+	int i = -1;
+	printf(YELLOW_TEXT"Kerlek valassz a lehetosegek kozul.\n");
+	printf(RED_TEXT"Kilepes: 0 ");
+	printf(CYAN_TEXT"Kiiratas 1 ");
+	printf(GREEN_TEXT"Szavazas: 2\n");
+	printf(RESET_TEXT);
+	while (i < 0 || i > 3)
+	{
+		scanf("%d", &i);
+	}
+	return i;
+}
+
+int szavazas(jatekosok *jatekosok, int jatekos_szam,int db_jatekosok_elok){
+	
+
+	return db_jatekosok_elok;
+}
 
 int main()
 {
@@ -125,9 +151,38 @@ int main()
 	int jatekos_szam = sc_jatekosszam();
 	sc_nevek(jatekos, jatekos_szam);
 	generalas(jatekos, jatekos_szam);
+	int db_jatekosok_elok = jatekos_szam;
+	int input = valaszto();
+	while (db_jatekosok_elok > 1)
+	{
+		if (input == 0)
+		{
+			printf(YELLOW_TEXT"Koszonom hogy a jatekommal jatszottal.\n");
+			printf(YELLOW_TEXT"Keszito: ");
+			printf(CYAN_TEXT"Nagy Csanad");
+			printf(RESET_TEXT);
+			return 0;
+		}
+		if (input == 1)
+		{
+			system("cls");
+			pr_jatekosok(jatekos, jatekos_szam);
+			input = valaszto();
+		}
+		if (input == 2)
+		{
+			db_jatekosok_elok = szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
+			if (db_jatekosok_elok < 3)
+			{
+				break;
+			}
+			input = valaszto();
+			
+		}
+		
+	}
+	
 	pr_jatekosok(jatekos, jatekos_szam);
 
 	return 0;
-
-
 }

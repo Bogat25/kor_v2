@@ -1,1 +1,2 @@
-t
+);
+			scanf("%d", inpu
