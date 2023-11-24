@@ -9,7 +9,7 @@ int main()
     int a = 0;
     scanf("%d", &a);
     printf("\x1b[1F"); // elso karakter a sorban
-    //printf("\x1b[2K"); // kitorli a sort
+    printf("\x1b[2K"); // kitorli a sort
     printf("Korte");
     scanf("%d", &a);
     printf("and");

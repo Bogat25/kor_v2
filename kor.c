@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <windows.h>
 
 
 #define BLACK_TEXT "\033[30m"
@@ -28,6 +29,7 @@
 #define db_politikai_beallitottsag 10
 #define db_eloelet 11
 
+#define ido_kilepes 5
 
 typedef struct {
     int id;
@@ -49,10 +51,10 @@ void pr_start(){
 void pr_jatekosok(jatekosok *jatekos, int jatekos_szam){
 	for (int i = 0; i < jatekos_szam; i++)
 	{
-	if (jatekos[i].el = 1)
+	if (jatekos[i].el == 1)
 	{
 		printf(BLUE_TEXT);
-	} else if(jatekos[i].el = 0){
+	} else if(jatekos[i].el == 0){
 		printf(RED_TEXT);
 	}
 	printf("ID %d ", jatekos[i].id);
@@ -85,6 +87,7 @@ void sc_nevek(jatekosok *jatekos,int jatekos_szam){
 		printf("%d. jatekos: ", i + 1);
 		scanf("%s", jatekos[i].nev);
 	}
+	system("cls");
 	
 }
 
@@ -138,8 +141,27 @@ int valaszto(){
 	return i;
 }
 
-int szavazas(jatekosok *jatekosok, int jatekos_szam,int db_jatekosok_elok){
+void kilepes(){
+	printf(YELLOW_TEXT"Koszonom hogy a jatekommal jatszottal.\n");
+	printf(YELLOW_TEXT"Keszito: ");
+	printf(CYAN_TEXT"Nagy Csanad\n");
+	printf(RESET_TEXT);
+	printf(" \n");
+	for (int i = 0; i < ido_kilepes; i++)
+	{
+				printf("A kilepesig ennyi ido van vissza: %d\n", ido_kilepes - i);
+		printf("\x1b[1F");		
+		Sleep(1000);
+	}
+	printf("\x1b[2K");//nullazza az adott sor karaktereit
+	printf(RED_TEXT"Kilepett");
+	printf(RESET_TEXT);
+}
+int szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
+	system("cls");
+	pr_jatekosok(jatekos, jatekos_szam);
 	
+
 
 	return db_jatekosok_elok;
 }
@@ -157,10 +179,7 @@ int main()
 	{
 		if (input == 0)
 		{
-			printf(YELLOW_TEXT"Koszonom hogy a jatekommal jatszottal.\n");
-			printf(YELLOW_TEXT"Keszito: ");
-			printf(CYAN_TEXT"Nagy Csanad");
-			printf(RESET_TEXT);
+			kilepes();
 			return 0;
 		}
 		if (input == 1)
@@ -177,6 +196,7 @@ int main()
 				break;
 			}
 			input = valaszto();
+			
 			
 		}
 		
