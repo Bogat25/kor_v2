@@ -30,6 +30,7 @@
 #define db_eloelet 11
 
 #define ido_kilepes 5
+#define ido_szavazas 5
 
 typedef struct {
     int id;
@@ -41,6 +42,8 @@ typedef struct {
 	char politika[max_char_hossz_politikai_beallitottsag];
 	int kinezet;
 	int el;
+	int szavazat;
+	int kapott_szavazat;
 
 } jatekosok;
 
@@ -133,6 +136,8 @@ void generalas(jatekosok *jatekos, int jatekos_szam){
 		strcpy(jatekos[i].politika, politikai_beallitottsagok[rand() % db_politikai_beallitottsag]);
 		jatekos[i].kinezet = rand() % 10 + 1;
 		jatekos[i].el = 1;
+		jatekos[i].szavazat = -1;
+		jatekos[i].kapott_szavazat = 0; 
 	}
 }
 
@@ -166,14 +171,56 @@ void kilepes(){
 	printf(RED_TEXT"Kilepett");
 	printf(RESET_TEXT);
 }
-int szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
-	system("cls");
-	pr_jatekosok(jatekos, jatekos_szam);
+int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		if (jatekos[i].szavazat == i + 1)
+		{
+			jatekos[i].el = 0;
+			printf(RED_TEXT"%s jatekos kiesett mert magara szavazott.\n", jatekos[i].nev); printf(RESET_TEXT);
+		}
+		if (jatekos[i].szavazat > max_jatekoszam || jatekos[i].szavazat < 1)
+		{
+			jatekos[i].el = 0;
+			printf(RED_TEXT"%s jatekos kiesett mert ervenytelen szavazatot adott le.\n", jatekos[i].nev); printf(RESET_TEXT);
+		}
+		
+	}
+	db_jatekosok_elok = 0;
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		if (jatekos[i].el == 1)
+		{
+			db_jatekosok_elok++;
+		}
+		 
+	}
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		jatekos[i].szavazat = -2;
+	}
 	
-
-
 	return db_jatekosok_elok;
 }
+
+int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
+	system("cls");
+	pr_jatekosok(jatekos, jatekos_szam);
+	printf(YELLOW_TEXT"Szavazas kezdete.\n");
+	printf(RED_TEXT"Csak %d mp-etek lessz szavazni. (aki nem szavaz az idon bellul az meghal)", ido_szavazas);
+	printf(RESET_TEXT);
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		if (jatekos[i].el = 1)
+		{
+		printf(CYAN_TEXT"\n%-*s ", max_char_hossz, jatekos[i].nev);
+		scanf("%d", &jatekos[i].szavazat);
+		}
+	}
+	db_jatekosok_elok = szavazas_szamlalo(jatekos,jatekos_szam,db_jatekosok_elok);
+	return db_jatekosok_elok;
+}
+
 
 int main()
 {
@@ -199,8 +246,8 @@ int main()
 		}
 		if (input == 2)
 		{
-			db_jatekosok_elok = szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
-			if (db_jatekosok_elok < 3)
+			db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
+			if (db_jatekosok_elok < 2)
 			{
 				break;
 			}

@@ -1,2 +1,1 @@
-);
-			scanf("%d", inpu
+szavazas
