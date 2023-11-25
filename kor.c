@@ -93,6 +93,9 @@ void pr_nyertes(jatekosok *jatekos, int jatekos_szam){
 	}
 	
 }
+void pr_mindenki_kiesett(){
+	printf(RED_TEXT"Mindenkit kiszavaztatok, így nincs nyertesünk csak sok, sok vesztesünk."); printf(RESET_TEXT);
+}
 
 int sc_jatekosszam(){
 	int a = 0;
@@ -352,6 +355,12 @@ int main()
 		while (db_jatekosok_elok == 1)
 		{
 			pr_nyertes(jatekos, jatekos_szam);
+			db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
+			break;
+		}
+		if (db_jatekosok_elok == 0)
+		{
+			pr_mindenki_kiesett();
 			db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
 			break;
 		}
