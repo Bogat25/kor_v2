@@ -96,7 +96,7 @@ void pr_nyertes(jatekosok *jatekos, int jatekos_szam){
 	
 }
 void pr_mindenki_kiesett(){
-	printf(RED_TEXT"Mindenkit kiszavaztatok, így nincs nyertesünk csak sok, sok vesztesünk."); printf(RESET_TEXT);
+	printf(RED_TEXT"Mindenkit kiszavaztatok, igy nincs nyertesunk csak sok, sok vesztesunk."); printf(RESET_TEXT);
 }
 
 int sc_jatekosszam(){
@@ -198,6 +198,7 @@ void kilepes(){
 	printf("\x1b[2K");//nullazza az adott sor karaktereit
 	printf(RED_TEXT"Kilepett");
 	printf(RESET_TEXT);
+	exit(0);
 }
 int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	for (int i = 0; i < jatekos_szam; i++)
@@ -348,9 +349,9 @@ void ido_szavazas_elott(){
 
 int main()
 {
-	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok));
 	pr_start();
 	int jatekos_szam = sc_jatekosszam();
+	jatekosok *jatekos = (jatekosok *)malloc(jatekos_szam * sizeof(jatekosok));
 	sc_nevek(jatekos, jatekos_szam);
 	int db_jatekosok_elok = jatekos_szam;
 	int jatekban = 1;
@@ -442,4 +443,9 @@ int main()
 			break;
 		}
 	}
+	/*
+	nem lehet kilepni a sokadik kor utan
+	beolvasasnal
+	*/
 }
+
