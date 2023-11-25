@@ -81,6 +81,18 @@ void pr_szabalyok(){
 	printf("Akikre ugyanannyi szavazat esik egy korben azok mind kiesnek.");
 	printf(RESET_TEXT);
 }
+void pr_nyertes(jatekosok *jatekos, int jatekos_szam){
+	for (int i = 0; i < jatekos_szam; i++)
+	{
+		if (jatekos[i].el == 1)
+		{
+			printf(YELLOW_TEXT"A nyertesunk %s\n", jatekos[i].nev); printf(RESET_TEXT);
+			printf(MAGENTA_TEXT"Gratulalunk a gyozelemhez, sikerult bebizonyitanod hogy te vagy a legertekesebb a tarsadalom szamara."); printf(RESET_TEXT);
+		}
+		
+	}
+	
+}
 
 int sc_jatekosszam(){
 	int a = 0;
@@ -192,18 +204,21 @@ int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok
 		
 	}
 	int max_szavazat = 0; //komment, nincs kezelve az ha 2 játékos egyenlő mennyiségü szavazatot kap
-	int max_szavazat_index = -1;
 	for(int i = 0; i < jatekos_szam;i++){
 		if (jatekos[i].kapott_szavazat > max_szavazat)
 		{
 			max_szavazat = jatekos[i].kapott_szavazat;
-			max_szavazat_index = i;
 		}
 	}
-	if (jatekos[max_szavazat_index].el == 1)
-	{
-	printf(RED_TEXT"%d. jatekost kiszavaztak.\n", max_szavazat_index + 1); printf(RESET_TEXT);
-	jatekos[max_szavazat_index].el = 0;	}
+
+	for(int i = 0; i < jatekos_szam;i++){
+		if (jatekos[i].kapott_szavazat == max_szavazat && jatekos[i].el == 1)
+		{
+			printf(RED_TEXT"%-*s jatekost kiszavaztak.\n",max_char_hossz,jatekos[i].nev); printf(RESET_TEXT);
+			jatekos[i].el = 0;
+		}
+		
+	}
 
 	db_jatekosok_elok = 0;
 	for (int i = 0; i < jatekos_szam; i++)
@@ -241,6 +256,23 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	return db_jatekosok_elok;
 }
 
+int nyertes_sorsolas(jatekosok *jatekos,int jatekos_szam, int db_emberek_elok){
+	int jatekosok_eloek_index[2];
+	int i = 0;
+	for (int i = 0; i <jatekos_szam; i++)
+	{
+		if(jatekos[i].el = 1){
+			jatekosok_eloek_index[i] = i;
+			i++;
+		}
+	}
+	//kisorsolja ki esik ki
+	int sorsolas = rand() % 2;
+	jatekos[jatekosok_eloek_index[sorsolas]].el = 0;
+	printf("A sorsolason kiesett: %s", jatekos[jatekosok_eloek_index[sorsolas]].nev);
+	db_emberek_elok--;
+	return db_emberek_elok;
+}
 
 int main()
 {
@@ -278,6 +310,16 @@ int main()
 			input = valaszto();
 		}
 	}
-
+	
+	while (db_jatekosok_elok == 2)
+	{
+		nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
+	}
+	while (db_jatekosok_elok == 1)
+	{
+		pr_nyertes(jatekos, jatekos_szam);
+		return 0;
+	}
+	
 	return 0;
 }
