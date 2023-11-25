@@ -261,10 +261,15 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	db_jatekosok_elok = szavazas_szamlalo(jatekos,jatekos_szam,db_jatekosok_elok);
 	return db_jatekosok_elok;
 }
+int ujrainditas(jatekosok *jatekos, int jatekos_szam, int db_jatekosok_elok){
+	generalas(jatekos,jatekos_szam);
+	db_jatekosok_elok = jatekos_szam;
+	return db_jatekosok_elok;
+}
 
-int sc_ujrainditas(jatekosok *jatekos,int jatekos_szam){
+int sc_ujrainditas(jatekosok *jatekos,int jatekos_szam, int db_jatekosok_elok){
 	int input = 0;
-	printf("\nSzeretnetek ujrakezdeni a jatekot?");
+	printf(CYAN_TEXT"\nSzeretnetek ujrakezdeni a jatekot?\n");
 	printf(GREEN_TEXT"Igen 1 ");
 	printf(MAGENTA_TEXT"Nem 2\n");
 	printf(RESET_TEXT);
@@ -273,7 +278,8 @@ int sc_ujrainditas(jatekosok *jatekos,int jatekos_szam){
 		scanf("%d", &input);
 	}
 	if(input == 1){
-		
+		db_jatekosok_elok = ujrainditas(jatekos,jatekos_szam,db_jatekosok_elok);
+		return db_jatekosok_elok;
 	}
 	else if(input == 2){
 		kilepes();
@@ -283,18 +289,17 @@ int sc_ujrainditas(jatekosok *jatekos,int jatekos_szam){
 
 int nyertes_sorsolas(jatekosok *jatekos,int jatekos_szam, int db_emberek_elok){
 	int jatekosok_eloek_index[2];
-	int i = 0;
+	int n = 0;
 	for (int i = 0; i <jatekos_szam; i++)
 	{
 		if(jatekos[i].el == 1){
-			jatekosok_eloek_index[i] = i;
-			i++;
+			jatekosok_eloek_index[n] = i;
+			n++;
 		}
 	}
 	//kisorsolja ki esik ki
 	int sorsolas = rand() % 2;
 	jatekos[jatekosok_eloek_index[sorsolas]].el = 0;
-	printf("A sorsolason kiesett: %s", jatekos[jatekosok_eloek_index[sorsolas]].nev);
 	db_emberek_elok--;
 	return db_emberek_elok;
 }
@@ -310,7 +315,9 @@ int main()
 	generalas(jatekos, jatekos_szam);
 	int db_jatekosok_elok = jatekos_szam;
 	int input = valaszto();
-	while (db_jatekosok_elok > 1)
+	int jatekban = 1;
+
+	while (db_jatekosok_elok > 2)
 	{
 		if (input == 0)
 		{
@@ -326,7 +333,7 @@ int main()
 		if (input == 2)
 		{
 			db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
-			if (db_jatekosok_elok < 2)
+			if (db_jatekosok_elok < 3)
 			{
 				break;
 			}
@@ -337,17 +344,16 @@ int main()
 			input = valaszto();
 		}
 	}
-	
-	while (db_jatekosok_elok == 2)
+	if(db_jatekosok_elok == 2)
 	{
-		nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
+		db_jatekosok_elok = nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
 	}
 	while (db_jatekosok_elok == 1)
 	{
 		pr_nyertes(jatekos, jatekos_szam);
-		sc_ujrainditas(jatekos,jatekos_szam);
-		return 0;
+		db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
 	}
+
 	
 	return 0;
 }
