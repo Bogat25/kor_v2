@@ -312,48 +312,48 @@ int main()
 	pr_start();
 	int jatekos_szam = sc_jatekosszam();
 	sc_nevek(jatekos, jatekos_szam);
-	generalas(jatekos, jatekos_szam);
 	int db_jatekosok_elok = jatekos_szam;
 	int input = valaszto();
 	int jatekban = 1;
-
-	while (db_jatekosok_elok > 2)
+	while (jatekban == 1)
 	{
-		if (input == 0)
+		generalas(jatekos, jatekos_szam);
+		while (db_jatekosok_elok > 2)
 		{
-			kilepes();
-			return 0;
-		}
-		if (input == 1)
-		{
-			system("cls");
-			pr_jatekosok(jatekos, jatekos_szam);
-			input = valaszto();
-		}
-		if (input == 2)
-		{
-			db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
-			if (db_jatekosok_elok < 3)
+			if (input == 0)
 			{
-				break;
+				kilepes();
+				return 0;
 			}
-			input = valaszto();
+			if (input == 1)
+			{
+				system("cls");
+				pr_jatekosok(jatekos, jatekos_szam);
+				input = valaszto();
+			}
+			if (input == 2)
+			{
+				db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
+				if (db_jatekosok_elok < 3)
+				{
+					break;
+				}
+				input = valaszto();
+			}
+			if (input == 3){
+				pr_szabalyok();
+				input = valaszto();
+			}
 		}
-		if (input == 3){
-			pr_szabalyok();
-			input = valaszto();
+		if(db_jatekosok_elok == 2)
+		{
+			db_jatekosok_elok = nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
+		}
+		while (db_jatekosok_elok == 1)
+		{
+			pr_nyertes(jatekos, jatekos_szam);
+			db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
+			break;
 		}
 	}
-	if(db_jatekosok_elok == 2)
-	{
-		db_jatekosok_elok = nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
-	}
-	while (db_jatekosok_elok == 1)
-	{
-		pr_nyertes(jatekos, jatekos_szam);
-		db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
-	}
-
-	
-	return 0;
 }
