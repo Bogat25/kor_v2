@@ -78,7 +78,7 @@ void pr_szabalyok(){
 	printf(MAGENTA_TEXT"Csak 1 nyertes lehet.\n");
 	printf("A szavazas utolso fordulojaban ha 2 jatekos maradt eletben akkor kozottuk veletlenszeruen sorsoljuk ki a nyertest.\n");
 	printf("Aki nem szavaz idoben az kiesett.\n");
-	printf("Akikre ugyanannyi szavazat esik egy korben azok mind kiesnek.");
+	printf("Akikre ugyanannyi szavazat esik egy korben azok mind kiesnek.\n");
 	printf(RESET_TEXT);
 }
 void pr_nyertes(jatekosok *jatekos, int jatekos_szam){
