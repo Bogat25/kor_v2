@@ -29,9 +29,10 @@
 #define db_politikai_beallitottsag 10
 #define db_eloelet 11
 
+//mp-ben vannak megadva az idok
 #define ido_kilepes 5
 #define ido_szavazas 5
-#define const_ido_szavazas_elott 5
+#define const_ido_szavazas_elott 60
 
 typedef struct {
     int id;
@@ -254,23 +255,37 @@ int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok
 
 int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	system("cls");
+	time_t ido_start, ido_jelenlegi;
+	double ido_eltelt;
+	
 	pr_jatekosok(jatekos, jatekos_szam);
 	printf(YELLOW_TEXT"Szavazas kezdete.\n");
 	printf(RED_TEXT"Csak %d mp-etek lessz szavazni. (aki nem szavaz az idon bellul az meghal)\n", ido_szavazas);
 	printf(RESET_TEXT);
 	for (int i = 0; i < jatekos_szam; i++)
 	{
+		time(&ido_start);
 		if (jatekos[i].el == 1)
 		{
 		printf(CYAN_TEXT"%-*s ", max_char_hossz, jatekos[i].nev);
 		scanf("%d", &jatekos[i].szavazat);
-		if (jatekos[jatekos[i].szavazat - 1].el != 1) //ha halottra szavaz akkor kiesik
+		time(&ido_jelenlegi);
+		ido_eltelt = difftime(ido_jelenlegi,ido_start);
+		if (ido_eltelt > ido_szavazas)
 		{
-			jatekos[i].szavazat = 0;
+			printf(RED_TEXT"Az ido lejart, kiestel.\n");printf(RESET_TEXT);
+			jatekos[i].szavazat = max_jatekoszam;
+
 		}
-		
+		else{
+			printf(CYAN_TEXT"A valaszod %d\n", jatekos[i].szavazat);		
+			if (jatekos[jatekos[i].szavazat - 1].el != 1) //ha halottra szavaz akkor kiesik
+			{
+				jatekos[i].szavazat = 0;
+			}
 		}
-		else{}
+		}
+
 	}
 	db_jatekosok_elok = szavazas_szamlalo(jatekos,jatekos_szam,db_jatekosok_elok);
 	return db_jatekosok_elok;
@@ -322,11 +337,11 @@ void ido_szavazas_elott(){
 	printf(CYAN_TEXT"Mielott elkezdodne a szavazas, kaptok %d m-ez megbeszelni kire szavazzatok.\n", const_ido_szavazas_elott);
 	for (int i = 0; i < ido_kilepes; i++)
 	{
-				printf("A szavazasig ennyi ido van vissza: %d\n", const_ido_szavazas_elott - i);
-		printf("\x1b[1F");		
+		printf("A szavazasig ennyi ido van vissza: %d\n", const_ido_szavazas_elott - i);
+		printf("\x1b[1F");
 		Sleep(1000);
 	}
-	printf("\x1b[2K");//nullazza az adott sor karaktereit
+	printf("\x1b[2K");
 	printf(RESET_TEXT);
 }
 
@@ -375,13 +390,11 @@ int main()
 			{
 				pr_nyertes(jatekos, jatekos_szam);
 				db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
-				break;
 			}
 			if (db_jatekosok_elok == 0)
 			{
 				pr_mindenki_kiesett();
 				db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
-				break;
 			}
 		}
 		
