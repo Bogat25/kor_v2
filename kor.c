@@ -115,6 +115,7 @@ void sc_nevek(jatekosok *jatekos,int jatekos_szam){
 	
 }
 
+
 void generalas(jatekosok *jatekos, int jatekos_szam){
 
 	const char foglalkozasok[][max_char_hossz_foglalkozas] = {
@@ -193,11 +194,11 @@ int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok
 				jatekos[i].el = 0;
 				printf(RED_TEXT"%s jatekos kiesett mert magara szavazott.\n", jatekos[i].nev); printf(RESET_TEXT);
 			}
-			else if (jatekos[i].szavazat > max_jatekoszam || jatekos[i].szavazat < 1)
+			else if (jatekos[i].szavazat > jatekos_szam || jatekos[i].szavazat < 1)
 			{
 				jatekos[i].el = 0;
 				printf(RED_TEXT"%s jatekos kiesett mert ervenytelen szavazatot adott le.\n", jatekos[i].nev); printf(RESET_TEXT);
-			} else{
+			}else{
 				jatekos[jatekos[i].szavazat - 1].kapott_szavazat++;
 			}
 		}
@@ -249,6 +250,11 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 		{
 		printf(CYAN_TEXT"%-*s ", max_char_hossz, jatekos[i].nev);
 		scanf("%d", &jatekos[i].szavazat);
+		if (jatekos[jatekos[i].szavazat - 1].el != 1) //ha halottra szavaz akkor kiesik
+		{
+			jatekos[i].szavazat = 0;
+		}
+		
 		}
 		else{}
 	}
@@ -256,12 +262,31 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 	return db_jatekosok_elok;
 }
 
+int sc_ujrainditas(jatekosok *jatekos,int jatekos_szam){
+	int input = 0;
+	printf("\nSzeretnetek ujrakezdeni a jatekot?");
+	printf(GREEN_TEXT"Igen 1 ");
+	printf(MAGENTA_TEXT"Nem 2\n");
+	printf(RESET_TEXT);
+	while (input < 1 || input > 2)
+	{
+		scanf("%d", &input);
+	}
+	if(input == 1){
+		
+	}
+	else if(input == 2){
+		kilepes();
+		return 0;
+	}
+}
+
 int nyertes_sorsolas(jatekosok *jatekos,int jatekos_szam, int db_emberek_elok){
 	int jatekosok_eloek_index[2];
 	int i = 0;
 	for (int i = 0; i <jatekos_szam; i++)
 	{
-		if(jatekos[i].el = 1){
+		if(jatekos[i].el == 1){
 			jatekosok_eloek_index[i] = i;
 			i++;
 		}
@@ -273,6 +298,8 @@ int nyertes_sorsolas(jatekosok *jatekos,int jatekos_szam, int db_emberek_elok){
 	db_emberek_elok--;
 	return db_emberek_elok;
 }
+
+
 
 int main()
 {
@@ -318,6 +345,7 @@ int main()
 	while (db_jatekosok_elok == 1)
 	{
 		pr_nyertes(jatekos, jatekos_szam);
+		sc_ujrainditas(jatekos,jatekos_szam);
 		return 0;
 	}
 	
