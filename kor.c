@@ -118,7 +118,17 @@ void sc_nevek(jatekosok *jatekos,int jatekos_szam){
 	
 }
 
-
+int sc_eles_jatszma(){
+	int eles_jatszma = -1;
+	printf(YELLOW_TEXT"Gyakorolni szeretnel vagy elesben jatszani?\n");
+	printf(GREEN_TEXT"Gyakorolni 0 ");
+	printf(CYAN_TEXT"Elesben 1\n");printf(RESET_TEXT);
+	while (eles_jatszma < 0 || eles_jatszma > 1)
+	{
+		scanf("%d", &eles_jatszma);
+	}
+	return eles_jatszma;
+}
 void generalas(jatekosok *jatekos, int jatekos_szam){
 
 	const char foglalkozasok[][max_char_hossz_foglalkozas] = {
@@ -316,11 +326,51 @@ int main()
 	int jatekos_szam = sc_jatekosszam();
 	sc_nevek(jatekos, jatekos_szam);
 	int db_jatekosok_elok = jatekos_szam;
-	int input = valaszto();
 	int jatekban = 1;
+	int eles_jatszma = 0;
+	eles_jatszma = sc_eles_jatszma();
+	int input;
+	if (eles_jatszma == 1)
+	{
+		input = 2;
+	}else if(eles_jatszma == 0){
+	input = valaszto();
+	}
+	
 	while (jatekban == 1)
 	{
 		generalas(jatekos, jatekos_szam);
+		while (eles_jatszma == 1)
+		{
+				while (db_jatekosok_elok > 2)
+			{
+				if (input == 2)
+				{
+					db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
+					if (db_jatekosok_elok < 3)
+					{
+						break;
+					}
+				}
+			}
+			if(db_jatekosok_elok == 2)
+			{
+				db_jatekosok_elok = nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
+			}
+			while (db_jatekosok_elok == 1)
+			{
+				pr_nyertes(jatekos, jatekos_szam);
+				db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
+				break;
+			}
+			if (db_jatekosok_elok == 0)
+			{
+				pr_mindenki_kiesett();
+				db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
+				break;
+			}
+		}
+		
 		while (db_jatekosok_elok > 2)
 		{
 			if (input == 0)
