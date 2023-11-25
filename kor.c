@@ -31,6 +31,7 @@
 
 #define ido_kilepes 5
 #define ido_szavazas 5
+#define const_ido_szavazas_elott 5
 
 typedef struct {
     int id;
@@ -317,11 +318,22 @@ int nyertes_sorsolas(jatekosok *jatekos,int jatekos_szam, int db_emberek_elok){
 	return db_emberek_elok;
 }
 
+void ido_szavazas_elott(){
+	printf(CYAN_TEXT"Mielott elkezdodne a szavazas, kaptok %d m-ez megbeszelni kire szavazzatok.\n", const_ido_szavazas_elott);
+	for (int i = 0; i < ido_kilepes; i++)
+	{
+				printf("A szavazasig ennyi ido van vissza: %d\n", const_ido_szavazas_elott - i);
+		printf("\x1b[1F");		
+		Sleep(1000);
+	}
+	printf("\x1b[2K");//nullazza az adott sor karaktereit
+	printf(RESET_TEXT);
+}
 
 
 int main()
 {
-	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok)); //jatekos[4].nev
+	jatekosok *jatekos = (jatekosok *)malloc(max_jatekoszam * sizeof(jatekosok));
 	pr_start();
 	int jatekos_szam = sc_jatekosszam();
 	sc_nevek(jatekos, jatekos_szam);
@@ -346,6 +358,8 @@ int main()
 			{
 				if (input == 2)
 				{
+					pr_jatekosok(jatekos,jatekos_szam);
+					ido_szavazas_elott();
 					db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
 					if (db_jatekosok_elok < 3)
 					{
