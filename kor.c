@@ -88,6 +88,8 @@ void pr_szabalyok(){
 	printf("A szavazas utolso fordulojaban ha 2 jatekos maradt eletben akkor kozottuk veletlenszeruen sorsoljuk ki a nyertest.\n");
 	printf("Aki nem szavaz idoben az kiesett.\n");
 	printf("Akikre ugyanannyi szavazat esik egy korben azok mind kiesnek.\n");
+	printf(RED_TEXT"\nJelenleg nincs felkeszitve a program arra hogyha ervenytelen bemenetet kap igy ezeket keretik mellozni.\n");
+	printf(CYAN_TEXT"Ez a gyakorlatban azt jelenti hogy ne irjatok be a szamok helyere szoveget es forditva.\n\n");
 	printf(RESET_TEXT);
 }
 void pr_nyertes(jatekosok *jatekos, int jatekos_szam){
@@ -467,6 +469,8 @@ int main()
 		{
 			pr_nyertes(jatekos, jatekos_szam);
 			db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
+			system("cls");
+			input = valaszto();
 			break;
 		}
 		if (db_jatekosok_elok == 0)
