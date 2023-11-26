@@ -34,6 +34,7 @@
 #define ido_szavazas 5
 #define const_ido_szavazas_elott 3
 #define const_ido_szavazas_utan 5
+#define const_ido_nyertes_sorsolas 5
 
 typedef struct {
     int id;
@@ -101,12 +102,23 @@ void pr_nyertes(jatekosok *jatekos, int jatekos_szam){
 	}
 	
 }
+void pr_nyertes_sorsolas(){
+	printf(YELLOW_TEXT"Mivel 2 jatekos maradt eletben igy kozuluk kisorsoljuk a nyertest.\n");printf(RESET_TEXT);
+	for(int i = 0; i < const_ido_nyertes_sorsolas;i++){
+		printf("%d mp van vissza a sorsolas vegeig...\n",const_ido_nyertes_sorsolas - i);
+		printf("\x1b[1F");
+		Sleep(1000);
+	}
+	printf("\x1b[2K");
+	printf("\n");
+}
 void pr_mindenki_kiesett(){
 	printf(RED_TEXT"Mindenkit kiszavaztatok, igy nincs nyertesunk csak sok, sok vesztesunk."); printf(RESET_TEXT);
 }
 
 int sc_jatekosszam(){
 	int a = 0;
+	printf(YELLOW_TEXT"Kerlek adjatok meg hanyan szeretnetek jatszani 3-%d\n", max_jatekoszam);printf(RESET_TEXT);
     while (a < 3 || a > 8)
     {
 	scanf("%d", &a);
@@ -392,7 +404,9 @@ int main()
 					pr_jatekosok(jatekos,jatekos_szam);
 					ido_szavazas_elott();
 					db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
+					if(db_jatekosok_elok > 2){
 					ido_szavazas_utan();
+					}
 					if (db_jatekosok_elok < 3)
 					{
 						break;
@@ -401,6 +415,7 @@ int main()
 			}
 			if(db_jatekosok_elok == 2)
 			{
+				pr_nyertes_sorsolas();
 				db_jatekosok_elok = nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
 			}
 			while (db_jatekosok_elok == 1)
@@ -445,6 +460,7 @@ int main()
 		}
 		if(db_jatekosok_elok == 2)
 		{
+			pr_nyertes_sorsolas();
 			db_jatekosok_elok = nyertes_sorsolas(jatekos, jatekos_szam, db_jatekosok_elok);
 		}
 		while (db_jatekosok_elok == 1)
