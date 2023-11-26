@@ -32,7 +32,8 @@
 //mp-ben vannak megadva az idok
 #define ido_kilepes 5
 #define ido_szavazas 5
-#define const_ido_szavazas_elott 60
+#define const_ido_szavazas_elott 3
+#define const_ido_szavazas_utan 5
 
 typedef struct {
     int id;
@@ -231,7 +232,7 @@ int szavazas_szamlalo(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok
 	for(int i = 0; i < jatekos_szam;i++){
 		if (jatekos[i].kapott_szavazat == max_szavazat && jatekos[i].el == 1)
 		{
-			printf(RED_TEXT"%-*s jatekost kiszavaztak.\n",max_char_hossz,jatekos[i].nev); printf(RESET_TEXT);
+			printf(RED_TEXT"%s jatekost kiszavaztak.\n",jatekos[i].nev); printf(RESET_TEXT);
 			jatekos[i].el = 0;
 		}
 		
@@ -268,7 +269,7 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 		time(&ido_start);
 		if (jatekos[i].el == 1)
 		{
-		printf(CYAN_TEXT"%-*s ", max_char_hossz, jatekos[i].nev);
+		printf(CYAN_TEXT"%s ", jatekos[i].nev);
 		scanf("%d", &jatekos[i].szavazat);
 		time(&ido_jelenlegi);
 		ido_eltelt = difftime(ido_jelenlegi,ido_start);
@@ -336,7 +337,7 @@ int nyertes_sorsolas(jatekosok *jatekos,int jatekos_szam, int db_emberek_elok){
 
 void ido_szavazas_elott(){
 	printf(CYAN_TEXT"Mielott elkezdodne a szavazas, kaptok %d m-ez megbeszelni kire szavazzatok.\n", const_ido_szavazas_elott);
-	for (int i = 0; i < ido_kilepes; i++)
+	for (int i = 0; i < const_ido_szavazas_elott; i++)
 	{
 		printf("A szavazasig ennyi ido van vissza: %d\n", const_ido_szavazas_elott - i);
 		printf("\x1b[1F");
@@ -346,6 +347,15 @@ void ido_szavazas_elott(){
 	printf(RESET_TEXT);
 }
 
+void ido_szavazas_utan(){
+	printf(YELLOW_TEXT"\n");
+		for (int i = 0; i < const_ido_szavazas_utan; i++)
+	{
+		printf("A kovetkezo korig ennyi ido van vissza %d\n", const_ido_szavazas_utan - i);
+		printf("\x1b[1F");
+		Sleep(1000);
+	}
+}
 
 int main()
 {
@@ -377,6 +387,7 @@ int main()
 					pr_jatekosok(jatekos,jatekos_szam);
 					ido_szavazas_elott();
 					db_jatekosok_elok = sc_szavazas(jatekos, jatekos_szam,db_jatekosok_elok);
+					ido_szavazas_utan();
 					if (db_jatekosok_elok < 3)
 					{
 						break;
