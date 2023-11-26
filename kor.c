@@ -201,6 +201,7 @@ int valaszto(){
 	{
 		scanf("%d", &i);
 	}
+	system("cls");
 	return i;
 }
 void kilepes(){
