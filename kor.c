@@ -51,7 +51,12 @@ typedef struct {
 } jatekosok;
 
 void pr_start(){
-	printf("Jatek tortenete. Bevezeto.\n");
+	printf(YELLOW_TEXT"Udvozollek a kor nevu jatekban.\n");
+	printf(RESET_TEXT);
+	printf(MAGENTA_TEXT"A Fold az emberiseg tulnepesedese miatt szorult egy veszhelyzeti beavatkozasra.\nA vilag vezetoi osszegyultek es ugy dontottek, hogy csak egy kivalasztott csoport szamara biztosithato a tuleles, ezzel megmentve az emberiseget a kihalastol.\n");
+	printf("Rajtatok all a felelosseg hogy eldontsetek melyikotok a leginkabb erdemes az eletre.\n");
+	printf("\n");
+	printf(RESET_TEXT);
 }
 
 void pr_jatekosok(jatekosok *jatekos, int jatekos_szam){
@@ -280,7 +285,7 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 
 		}
 		else{
-			printf(CYAN_TEXT"A valaszod %d\n", jatekos[i].szavazat);		
+			printf(CYAN_TEXT"A valaszod %d\n", jatekos[i].szavazat); printf(RESET_TEXT);		
 			if (jatekos[jatekos[i].szavazat - 1].el != 1) //ha halottra szavaz akkor kiesik
 			{
 				jatekos[i].szavazat = 0;
@@ -409,8 +414,9 @@ int main()
 				db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
 			}
 		}
-		
-		while (db_jatekosok_elok > 2)
+		while (eles_jatszma == 0)
+		{
+			while (db_jatekosok_elok > 2)
 		{
 			if (input == 0)
 			{
@@ -453,10 +459,7 @@ int main()
 			db_jatekosok_elok = sc_ujrainditas(jatekos,jatekos_szam, db_jatekosok_elok);
 			break;
 		}
+		}
 	}
-	/*
-	nem lehet kilepni a sokadik kor utan
-	beolvasasnal
-	*/
 }
 
