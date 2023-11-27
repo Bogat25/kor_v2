@@ -289,7 +289,7 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 		time(&ido_start);
 		if (jatekos[i].el == 1)
 		{
-		printf(CYAN_TEXT"%s ", jatekos[i].nev);
+		printf(GREEN_TEXT"%s ", jatekos[i].nev); printf(CYAN_TEXT);
 		scanf("%d", &jatekos[i].szavazat);
 		time(&ido_jelenlegi);
 		ido_eltelt = difftime(ido_jelenlegi,ido_start);
@@ -299,8 +299,7 @@ int sc_szavazas(jatekosok *jatekos, int jatekos_szam,int db_jatekosok_elok){
 			jatekos[i].szavazat = max_jatekoszam;
 
 		}
-		else{
-			printf(CYAN_TEXT"A valaszod %d\n", jatekos[i].szavazat); printf(RESET_TEXT);		
+		else{	
 			if (jatekos[jatekos[i].szavazat - 1].el != 1) //ha halottra szavaz akkor kiesik
 			{
 				jatekos[i].szavazat = 0;
